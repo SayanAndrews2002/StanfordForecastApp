@@ -35,7 +35,7 @@ jobs:
       - name: Upgrade pip and build tools
         run: |
           source venv/bin/activate
-          pip install --upgrade pip setuptools wheel
+          pip install --upgrade pip setuptools==68.1.0 wheel
 
       - name: Install dependencies
         run: |
