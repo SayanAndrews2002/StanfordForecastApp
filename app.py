@@ -1,24 +1,22 @@
-from flask import Flask, render_template, request
-import forecasting_module  # This is your forecasting project code
+from flask import Flask, request
+import forecasting_module  # Make sure this module contains your forecasting code, e.g., main_pod()
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("index.html")  # A homepage template – “Hello Stanford” maybe plus links
+    return "Hello Stanford - Forecasting App Deployed Successfully!"
 
-@app.route("/forecast", methods=["GET", "POST"])
-def forecast():
-    if request.method == "POST":
-        # Accept parameters here, for example:
-        forecast_months = int(request.form.get("forecast_months", 24))
-        # Run your forecasting routines (group or pod level as needed)
-        results = forecasting_module.main_pod(forecast_months=forecast_months)
-        # Optionally, you can pass results to a template for display.
-        return render_template("forecast.html", results=results)
-    else:
-        # or just show a form for input
-        return render_template("forecast_form.html")
+@app.route("/run_forecast", methods=["GET"])
+def run_forecast():
+    # Optionally, you could get parameters from the request (e.g., forecast horizon) using request.args.
+    # For now, we'll simply run your pod-level forecasting pipeline with a 24 month horizon.
+    try:
+        results = forecasting_module.main_pod(forecast_months=24)
+        return "Forecasting pipeline completed successfully!"
+    except Exception as e:
+        return f"An error occurred during forecasting: {str(e)}", 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # When deploying on Azure, you may want to specify the host (0.0.0.0) and port (e.g., 8000)
+    app.run(host="0.0.0.0", port=8000, debug=True)
