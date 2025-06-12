@@ -57,6 +57,7 @@ jobs:
           path: |
             release.zip
             requirements.txt
+            runtime.txt
             !venv/
 
   deploy:
